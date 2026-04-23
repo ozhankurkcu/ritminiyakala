@@ -1,9 +1,13 @@
 const express = require('express');
+const activitiesRouter = require('./routes/activities');
 const app = express();
 const PORT = 3000;
 
 app.use(express.static('public'));
 app.use(express.json());
+
+// Routes
+app.use('/api/activities', activitiesRouter);
 
 // EN sayfası
 app.get('/en', (req, res) => {
