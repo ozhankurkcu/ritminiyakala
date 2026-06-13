@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Placeholder — Sprint 0 Adım 0.7'de detaylı yazılacak
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
