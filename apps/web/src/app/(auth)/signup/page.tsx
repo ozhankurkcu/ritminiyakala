@@ -147,7 +147,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary btn-lg w-full mt-2"
+            className="btn-secondary btn-lg w-full mt-2"
           >
             {loading ? 'Kayıt yapılıyor...' : 'Kayıt Ol'}
           </button>
