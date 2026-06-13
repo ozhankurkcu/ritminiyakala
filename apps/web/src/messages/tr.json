@@ -1,0 +1,125 @@
+{
+  "common": {
+    "appName": "Ritminiyakala",
+    "tagline": "Global Spor Aktivite Keşif Platformu",
+    "loading": "Yükleniyor...",
+    "error": "Hata oluştu",
+    "retry": "Tekrar Dene",
+    "cancel": "İptal",
+    "save": "Kaydet",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "confirm": "Onayla",
+    "back": "Geri",
+    "next": "İleri",
+    "close": "Kapat",
+    "search": "Ara"
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "discover": "Keşfet",
+    "dashboard": "Panelim",
+    "profile": "Profilim",
+    "createActivity": "Aktivite Oluştur",
+    "login": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "logout": "Çıkış Yap"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "logout": "Çıkış Yap",
+    "email": "E-posta",
+    "password": "Şifre",
+    "confirmPassword": "Şifre Tekrar",
+    "displayName": "Ad Soyad",
+    "forgotPassword": "Şifremi Unuttum",
+    "resetPassword": "Şifreyi Sıfırla",
+    "noAccount": "Hesabın yok mu?",
+    "hasAccount": "Hesabın var mı?",
+    "emailVerification": "E-posta Doğrulaması",
+    "verificationSent": "Doğrulama e-postası gönderildi.",
+    "googleLogin": "Google ile Giriş Yap",
+    "appleLogin": "Apple ile Giriş Yap",
+    "errors": {
+      "emailInUse": "Bu e-posta zaten kayıtlı",
+      "invalidEmail": "Geçersiz e-posta adresi",
+      "weakPassword": "Şifre en az 6 karakter olmalı",
+      "userNotFound": "Kullanıcı bulunamadı",
+      "wrongPassword": "Şifre yanlış",
+      "tooManyRequests": "Çok fazla deneme. Lütfen sonra tekrar deneyin.",
+      "emailNotVerified": "E-postanızı doğrulayın. Tekrar gönderdik."
+    }
+  },
+  "activity": {
+    "title": "Başlık",
+    "description": "Açıklama",
+    "sportType": "Spor Türü",
+    "skillLevel": "Seviye",
+    "location": "Konum",
+    "date": "Tarih",
+    "time": "Saat",
+    "duration": "Süre",
+    "maxParticipants": "Maks. Katılımcı",
+    "currentParticipants": "Mevcut Katılımcı",
+    "join": "Katıl",
+    "leave": "Ayrıl",
+    "createActivity": "Aktivite Oluştur",
+    "editActivity": "Aktiviteyi Düzenle",
+    "cancelActivity": "Aktiviteyi İptal Et",
+    "status": {
+      "scheduled": "Planlandı",
+      "ongoing": "Devam Ediyor",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal Edildi"
+    },
+    "skillLevels": {
+      "beginner": "Başlangıç",
+      "intermediate": "Orta Seviye",
+      "advanced": "İleri Seviye",
+      "all": "Tüm Seviyeler"
+    },
+    "participantStatus": {
+      "confirmed": "Onaylandı",
+      "pending": "Beklemede",
+      "declined": "Reddedildi",
+      "cancelled": "İptal Edildi"
+    }
+  },
+  "profile": {
+    "editProfile": "Profili Düzenle",
+    "displayName": "Ad Soyad",
+    "bio": "Hakkımda",
+    "sportPreferences": "Spor Tercihleri",
+    "skillLevel": "Seviyem",
+    "location": "Konum",
+    "uploadPhoto": "Fotoğraf Yükle",
+    "myActivities": "Aktivitelerim",
+    "upcoming": "Yaklaşan",
+    "past": "Geçmiş"
+  },
+  "discover": {
+    "title": "Aktiviteleri Keşfet",
+    "searchPlaceholder": "Aktivite veya spor türü ara...",
+    "filterBy": "Filtrele",
+    "noResults": "Aktivite bulunamadı",
+    "nearYou": "Yakınındakiler",
+    "radius": "Yarıçap"
+  },
+  "sports": {
+    "futbol": "Futbol",
+    "basketbol": "Basketbol",
+    "voleybol": "Voleybol",
+    "tenis": "Tenis",
+    "padel": "Padel",
+    "kosu": "Koşu",
+    "yuruyus": "Yürüyüş",
+    "bisiklet": "Bisiklet",
+    "yuzme": "Yüzme",
+    "fitness": "Fitness",
+    "yoga": "Yoga",
+    "dans": "Dans",
+    "doga-sporlari": "Doğa Sporları",
+    "diger": "Diğer"
+  }
+}

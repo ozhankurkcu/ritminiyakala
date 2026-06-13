@@ -1,13 +1,26 @@
-export default function Home() {
+import { getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
+import { type Locale } from '@/i18n/request';
+import { LocaleSwitcher } from '@/components/shared/LocaleSwitcher';
+
+export default async function Home() {
+  const t = await getTranslations();
+  const locale = (cookies().get('locale')?.value ?? 'tr') as Locale;
+
   return (
     <main className="min-h-screen bg-brand-lightBg flex flex-col items-center justify-center p-8">
+      {/* Dil Değiştirici */}
+      <div className="absolute top-4 right-6">
+        <LocaleSwitcher currentLocale={locale} />
+      </div>
+
       {/* Logo / Brand */}
       <div className="text-center mb-12">
         <h1 className="font-heading text-4xl font-extrabold text-primary-700 mb-2">
           ritminiyakala
         </h1>
         <p className="text-brand-fume text-lg font-body">
-          Global Spor Aktivite Keşif Platformu
+          {t('common.tagline')}
         </p>
       </div>
 

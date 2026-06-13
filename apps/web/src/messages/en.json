@@ -1,0 +1,125 @@
+{
+  "common": {
+    "appName": "Ritminiyakala",
+    "tagline": "Global Sports Activity Discovery Platform",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "search": "Search"
+  },
+  "nav": {
+    "home": "Home",
+    "discover": "Discover",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "createActivity": "Create Activity",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out"
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "displayName": "Full Name",
+    "forgotPassword": "Forgot Password",
+    "resetPassword": "Reset Password",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "emailVerification": "Email Verification",
+    "verificationSent": "Verification email sent.",
+    "googleLogin": "Continue with Google",
+    "appleLogin": "Continue with Apple",
+    "errors": {
+      "emailInUse": "This email is already registered",
+      "invalidEmail": "Invalid email address",
+      "weakPassword": "Password must be at least 6 characters",
+      "userNotFound": "User not found",
+      "wrongPassword": "Wrong password",
+      "tooManyRequests": "Too many attempts. Please try again later.",
+      "emailNotVerified": "Please verify your email. We resent the link."
+    }
+  },
+  "activity": {
+    "title": "Title",
+    "description": "Description",
+    "sportType": "Sport Type",
+    "skillLevel": "Skill Level",
+    "location": "Location",
+    "date": "Date",
+    "time": "Time",
+    "duration": "Duration",
+    "maxParticipants": "Max Participants",
+    "currentParticipants": "Current Participants",
+    "join": "Join",
+    "leave": "Leave",
+    "createActivity": "Create Activity",
+    "editActivity": "Edit Activity",
+    "cancelActivity": "Cancel Activity",
+    "status": {
+      "scheduled": "Scheduled",
+      "ongoing": "Ongoing",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "skillLevels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "all": "All Levels"
+    },
+    "participantStatus": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "declined": "Declined",
+      "cancelled": "Cancelled"
+    }
+  },
+  "profile": {
+    "editProfile": "Edit Profile",
+    "displayName": "Full Name",
+    "bio": "About Me",
+    "sportPreferences": "Sport Preferences",
+    "skillLevel": "My Level",
+    "location": "Location",
+    "uploadPhoto": "Upload Photo",
+    "myActivities": "My Activities",
+    "upcoming": "Upcoming",
+    "past": "Past"
+  },
+  "discover": {
+    "title": "Discover Activities",
+    "searchPlaceholder": "Search activities or sport types...",
+    "filterBy": "Filter",
+    "noResults": "No activities found",
+    "nearYou": "Near You",
+    "radius": "Radius"
+  },
+  "sports": {
+    "futbol": "Football",
+    "basketbol": "Basketball",
+    "voleybol": "Volleyball",
+    "tenis": "Tennis",
+    "padel": "Padel",
+    "kosu": "Running",
+    "yuruyus": "Walking",
+    "bisiklet": "Cycling",
+    "yuzme": "Swimming",
+    "fitness": "Fitness",
+    "yoga": "Yoga",
+    "dans": "Dance",
+    "doga-sporlari": "Outdoor Sports",
+    "diger": "Other"
+  }
+}
