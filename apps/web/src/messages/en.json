@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "appName": "Ritminiyakala",
     "tagline": "Global Sports Activity Discovery Platform",
@@ -54,7 +54,7 @@
   "activity": {
     "title": "Title",
     "description": "Description",
-    "sportType": "Sport Type",
+    "activityType": "Sport Type",
     "skillLevel": "Skill Level",
     "location": "Location",
     "date": "Date",

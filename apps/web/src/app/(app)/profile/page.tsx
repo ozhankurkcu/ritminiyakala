@@ -1,17 +1,10 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/modules/auth/useAuth';
 import { profileService } from '@/modules/profile/profileService';
-import { SPORT_TYPES, SKILL_LEVELS, SKILL_LEVEL_LABELS, type SkillLevel, type SportType } from '@/lib/constants';
+import { ACTIVITY_TYPES, ACTIVITY_LABELS, SKILL_LEVELS, SKILL_LEVEL_LABELS, type SkillLevel, type ActivityType } from '@/lib/constants';
 import type { UserProfile } from '@/types';
-
-const SPORT_LABELS: Record<SportType, string> = {
-  futbol: 'Futbol', basketbol: 'Basketbol', voleybol: 'Voleybol',
-  tenis: 'Tenis', padel: 'Padel', kosu: 'Koşu', yuruyus: 'Yürüyüş',
-  bisiklet: 'Bisiklet', yuzme: 'Yüzme', fitness: 'Fitness',
-  yoga: 'Yoga', dans: 'Dans', 'doga-sporlari': 'Doğa Sporları', diger: 'Diğer',
-};
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -21,11 +14,13 @@ export default function ProfilePage() {
   const [success, setSuccess]   = useState(false);
   const [error, setError]       = useState('');
 
+  const [loadingProfile, setLoadingProfile] = useState(true);
+
   const [form, setForm] = useState({
     displayName:      '',
     bio:              '',
     skillLevel:       'beginner' as SkillLevel,
-    sportPreferences: [] as SportType[],
+    sportPreferences: [] as ActivityType[],
   });
 
   useEffect(() => {
@@ -40,10 +35,15 @@ export default function ProfilePage() {
           sportPreferences: p.sportPreferences,
         });
       }
+    }).catch((err) => {
+      console.error('Profile fetch error:', err);
+      setError(`Profil yüklenemedi: ${err?.message ?? err?.code ?? 'Bilinmeyen hata'}`);
+    }).finally(() => {
+      setLoadingProfile(false);
     });
   }, [user]);
 
-  const toggleSport = (sport: SportType) => {
+  const toggleSport = (sport: ActivityType) => {
     setForm((prev) => ({
       ...prev,
       sportPreferences: prev.sportPreferences.includes(sport)
@@ -69,13 +69,26 @@ export default function ProfilePage() {
     }
   };
 
-  if (!profile) {
+  if (loadingProfile) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="w-8 h-8 border-4 border-primary-700 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
+
+  if (error && !profile) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="card p-6 text-center">
+          <p className="text-status-error font-semibold mb-2">Profil yüklenemedi</p>
+          <p className="text-sm text-brand-fume">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profile) return null;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -110,9 +123,10 @@ export default function ProfilePage() {
         {/* Avatar */}
         <div className="flex items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-primary-100 flex items-center justify-center text-3xl font-heading font-bold text-primary-700 overflow-hidden">
-            {profile.photoURL
+            {profile?.photoURL
+              // eslint-disable-next-line @next/next/no-img-element
               ? <img src={profile.photoURL} alt="avatar" className="w-full h-full object-cover" />
-              : profile.displayName?.[0]?.toUpperCase() ?? '?'
+              : profile?.displayName?.[0]?.toUpperCase() ?? '?'
             }
           </div>
           <div>
@@ -181,7 +195,7 @@ export default function ProfilePage() {
           <label className="block text-sm font-heading font-semibold text-black mb-2">Spor Tercihlerim</label>
           {editing ? (
             <div className="flex flex-wrap gap-2">
-              {SPORT_TYPES.map((sport) => (
+              {ACTIVITY_TYPES.map((sport) => (
                 <button
                   key={sport}
                   type="button"
@@ -192,7 +206,7 @@ export default function ProfilePage() {
                       : 'border-brand-border text-brand-fume hover:border-accent-dark'
                   }`}
                 >
-                  {SPORT_LABELS[sport]}
+                  {ACTIVITY_LABELS[sport]}
                 </button>
               ))}
             </div>
@@ -200,7 +214,7 @@ export default function ProfilePage() {
             <div className="flex flex-wrap gap-2">
               {profile.sportPreferences.length > 0
                 ? profile.sportPreferences.map((s) => (
-                    <span key={s} className="badge-primary">{SPORT_LABELS[s]}</span>
+                    <span key={s} className="badge-primary">{ACTIVITY_LABELS[s]}</span>
                   ))
                 : <p className="text-brand-fume text-sm">Henüz spor tercihi eklenmemiş</p>
               }

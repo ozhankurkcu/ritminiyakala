@@ -1,7 +1,8 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider,
   signOut,
   sendEmailVerification,
@@ -42,17 +43,26 @@ export const authService = {
   async loginWithEmail(email: string, password: string): Promise<User> {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
 
+    // E-posta doğrulama ZORUNLU DEĞİL — signup ekranı "onaylamadan da devam
+    // edebilirsin" dediği için girişi engellemiyoruz. Doğrulanmamışsa sadece
+    // hatırlatma amaçlı yeni bir doğrulama e-postası gönderiyoruz (arka planda,
+    // hata olursa yutuluyor ki giriş bloklanmasın).
     if (!user.emailVerified) {
-      await sendEmailVerification(user);
-      throw { code: 'auth/email-not-verified' };
+      sendEmailVerification(user).catch(() => {/* sessizce geç */});
     }
 
     return user;
   },
 
-  async loginWithGoogle(): Promise<User> {
-    const { user } = await signInWithPopup(auth, googleProvider);
+  async loginWithGoogle(): Promise<void> {
+    await signInWithRedirect(auth, googleProvider);
+  },
 
+  async handleGoogleRedirect(): Promise<User | null> {
+    const result = await getRedirectResult(auth);
+    if (!result) return null;
+
+    const { user } = result;
     const userRef = doc(db, 'users', user.uid);
     const userSnap = await getDoc(userRef);
 

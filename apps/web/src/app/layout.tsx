@@ -18,6 +18,9 @@ const nunitoSans = Nunito_Sans({
 export const metadata: Metadata = {
   title: "Ritminiyakala — Spor Aktivite Keşif Platformu",
   description: "Yakınındaki spor aktivitelerini keşfet, spor arkadaşı bul, aktivite oluştur.",
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

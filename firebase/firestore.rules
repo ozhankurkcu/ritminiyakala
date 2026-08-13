@@ -1,4 +1,4 @@
-rules_version = '2';
+﻿rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -51,7 +51,7 @@ service cloud.firestore {
         && request.resource.data.maxParticipants >= 2
         && request.resource.data.maxParticipants <= 100
         && request.resource.data.startTime > request.time
-        && request.resource.data.keys().hasAll(["title", "sportType", "location", "startTime", "createdBy"]);
+        && request.resource.data.keys().hasAll(["title", "activityType", "location", "startTime", "createdBy"]);
 
       // Sadece oluşturan kişi güncelleyebilir (createdBy değiştirilemez)
       allow update: if isAuthenticated()

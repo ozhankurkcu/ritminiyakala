@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "appName": "Ritminiyakala",
     "tagline": "Global Spor Aktivite Keşif Platformu",
@@ -54,7 +54,7 @@
   "activity": {
     "title": "Başlık",
     "description": "Açıklama",
-    "sportType": "Spor Türü",
+    "activityType": "Spor Türü",
     "skillLevel": "Seviye",
     "location": "Konum",
     "date": "Tarih",

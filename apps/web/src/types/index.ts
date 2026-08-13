@@ -1,4 +1,4 @@
-import type { SkillLevel, SportType, ActivityStatus, ParticipantStatus } from '@/lib/constants';
+import type { SkillLevel, ActivityType, ActivityCategory, ActivityStatus, ParticipantStatus } from '@/lib/constants';
 
 export interface UserProfile {
   uid:              string;
@@ -6,7 +6,7 @@ export interface UserProfile {
   displayName:      string;
   photoURL?:        string;
   bio?:             string;
-  sportPreferences: SportType[];
+  sportPreferences: ActivityType[];
   skillLevel:       SkillLevel;
   location?: {
     latitude:  number;
@@ -16,13 +16,20 @@ export interface UserProfile {
   updatedAt:        Date;
   isEmailVerified:  boolean;
   status:           'active' | 'suspended' | 'deleted';
+  onboarded?:       boolean;
+  city?:            string;
+  activityTypes?:   ActivityType[];
+  experience?:      string;
 }
 
 export interface Activity {
   id:                 string;
   title:              string;
   description:        string;
-  sportType:          SportType;
+  activityType:       ActivityType | 'custom';
+  category:           ActivityCategory;
+  customTypeName?:    string;
+  customTypeStatus?:  'pending' | 'approved' | 'rejected' | null;
   skillLevel:         SkillLevel | 'all';
   location: {
     latitude:  number;
@@ -34,6 +41,8 @@ export interface Activity {
   maxParticipants:     number;
   currentParticipants: number;
   createdBy:           string;
+  organizerId:         string;
+  organizerName:       string;
   status:              ActivityStatus;
   imageUrl?:           string;
   createdAt:           Date;

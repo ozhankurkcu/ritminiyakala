@@ -1,16 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema, type SignupInput } from '@/lib/validators';
 import { authService } from '@/modules/auth/authService';
 import { getAuthErrorMessage } from '@/modules/auth/authErrors';
+import { PasswordInput } from '@/components/shared/PasswordInput';
 
 export default function SignupPage() {
-  const router = useRouter();
   const [error, setError]       = useState('');
   const [success, setSuccess]   = useState(false);
   const [loading, setLoading]   = useState(false);
@@ -38,18 +37,23 @@ export default function SignupPage() {
       <div className="min-h-screen bg-brand-lightBg flex items-center justify-center p-4">
         <div className="card max-w-md w-full text-center">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">✉️</span>
+            <span className="text-3xl">🎉</span>
           </div>
           <h1 className="font-heading text-2xl font-bold text-primary-700 mb-2">
-            E-postanı Doğrula
+            Hesabın Oluşturuldu!
           </h1>
-          <p className="text-brand-fume mb-6">
-            <strong>{}</strong> adresine doğrulama e-postası gönderdik.
-            Gelen kutunu kontrol et ve linke tıkla.
+          <p className="text-brand-fume mb-2">
+            Doğrulama e-postası gönderildi. Gelen kutunu kontrol et.
           </p>
-          <Link href="/login" className="btn-primary btn-md w-full block text-center">
-            Giriş Yap
+          <p className="text-sm text-brand-fume mb-6">
+            E-postayı onaylamadan da devam edebilirsin.
+          </p>
+          <Link href="/login" className="btn-primary btn-lg w-full block text-center no-underline text-white mb-3">
+            Giriş Yap → Kurulumu Tamamla
           </Link>
+          <p className="text-xs text-brand-fume">
+            Giriş yaptıktan sonra spor tercihlerini belirleme adımına yönlendirileceksin.
+          </p>
         </div>
       </div>
     );
@@ -67,7 +71,7 @@ export default function SignupPage() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} method="post" noValidate className="space-y-4">
           {/* Ad Soyad */}
           <div>
             <label className="block text-sm font-heading font-semibold text-black mb-1">
@@ -107,11 +111,9 @@ export default function SignupPage() {
             <label className="block text-sm font-heading font-semibold text-black mb-1">
               Şifre <span className="text-status-error">*</span>
             </label>
-            <input
+            <PasswordInput
               {...register('password')}
-              type="password"
               placeholder="En az 6 karakter"
-              className="input-base"
               autoComplete="new-password"
             />
             {errors.password && (
@@ -124,11 +126,9 @@ export default function SignupPage() {
             <label className="block text-sm font-heading font-semibold text-black mb-1">
               Şifre Tekrar <span className="text-status-error">*</span>
             </label>
-            <input
+            <PasswordInput
               {...register('confirmPassword')}
-              type="password"
               placeholder="Şifreni tekrar gir"
-              className="input-base"
               autoComplete="new-password"
             />
             {errors.confirmPassword && (

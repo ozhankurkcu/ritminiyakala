@@ -1,16 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { PasswordInput } from '@/components/shared/PasswordInput';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginInput } from '@/lib/validators';
 import { authService } from '@/modules/auth/authService';
 import { getAuthErrorMessage } from '@/modules/auth/authErrors';
+import { useAuth } from '@/modules/auth/useAuth';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -18,6 +21,18 @@ export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
+
+  // Handle Google redirect result and create Firestore doc if needed
+  useEffect(() => {
+    authService.handleGoogleRedirect().catch(() => {/* not a redirect */});
+  }, []);
+
+  // Redirect to dashboard when auth state resolves with a user
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
 
   const onSubmit = async (data: LoginInput) => {
     setError('');
@@ -42,11 +57,10 @@ export default function LoginPage() {
     setGoogleLoading(true);
     try {
       await authService.loginWithGoogle();
-      router.push('/dashboard');
+      // signInWithRedirect navigates away — no router.push needed
     } catch (err: unknown) {
       const code = (err as { code?: string }).code ?? '';
       setError(getAuthErrorMessage(code));
-    } finally {
       setGoogleLoading(false);
     }
   };
@@ -85,7 +99,7 @@ export default function LoginPage() {
         </div>
 
         {/* Email Form */}
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} method="post" noValidate className="space-y-4">
           <div>
             <label className="block text-sm font-heading font-semibold text-black mb-1">
               E-posta
@@ -111,11 +125,9 @@ export default function LoginPage() {
                 Şifremi unuttum
               </Link>
             </div>
-            <input
+            <PasswordInput
               {...register('password')}
-              type="password"
               placeholder="Şifren"
-              className="input-base"
               autoComplete="current-password"
             />
             {errors.password && (

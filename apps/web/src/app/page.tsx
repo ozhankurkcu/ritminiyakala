@@ -1,105 +1,99 @@
-import { getTranslations } from 'next-intl/server';
-import { cookies } from 'next/headers';
-import { type Locale } from '@/i18n/request';
-import { LocaleSwitcher } from '@/components/shared/LocaleSwitcher';
+﻿import Link from 'next/link';
+import { PublicNav } from '@/components/public/PublicNav';
+import { PublicFooter } from '@/components/public/PublicFooter';
+import { HeroSlider } from '@/components/public/HeroSlider';
+import { ActivityTypesSection } from '@/components/public/ActivityTypesSection';
 
-export default async function Home() {
-  const t = await getTranslations();
-  const locale = (cookies().get('locale')?.value ?? 'tr') as Locale;
+const STEPS = [
+  {
+    step: '01',
+    title: 'Profilini Oluştur',
+    desc: 'Spor tercihlerini ve tecrübe seviyeni belirt. Sana en uygun aktiviteler öne çıksın.',
+  },
+  {
+    step: '02',
+    title: 'Aktivite Keşfet',
+    desc: 'Yakınındaki spor aktivitelerini bul. Filtrele, incele, katılmak istediğine karar ver.',
+  },
+  {
+    step: '03',
+    title: 'Katıl veya Oluştur',
+    desc: 'Bir aktiviteye katıl ya da kendi aktiviteni oluştur. Sporun ritmini birlikte yakala.',
+  },
+];
 
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-brand-lightBg flex flex-col items-center justify-center p-8">
-      {/* Dil Değiştirici */}
-      <div className="absolute top-4 right-6">
-        <LocaleSwitcher currentLocale={locale} />
-      </div>
+    <div className="min-h-screen bg-brand-lightBg flex flex-col">
+      <PublicNav />
 
-      {/* Logo / Brand */}
-      <div className="text-center mb-12">
-        <h1 className="font-heading text-4xl font-extrabold text-primary-700 mb-2">
-          ritminiyakala
-        </h1>
-        <p className="text-brand-fume text-lg font-body">
-          {t('common.tagline')}
-        </p>
-      </div>
+      <main className="flex-1">
+        {/* HERO */}
+        <HeroSlider />
 
-      {/* Brand Renk Paleti — Sprint 0 test */}
-      <section className="w-full max-w-2xl mb-10">
-        <h2 className="font-heading text-xl font-bold text-black mb-4">Marka Renk Paleti</h2>
-        <div className="grid grid-cols-4 gap-3">
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <div className="h-16 bg-primary-700" />
-            <div className="p-2 bg-white text-xs font-body">
-              <p className="font-semibold">Primary</p>
-              <p className="text-brand-fume">#631C99</p>
+        {/* SPOR TÜRLERİ */}
+        <ActivityTypesSection />
+
+        {/* NASIL ÇALIŞIR */}
+        <section className="bg-white py-16 px-4">
+          <div className="container-rny max-w-4xl mx-auto">
+            <h2 className="font-heading text-2xl font-bold text-black text-center mb-2">
+              Nasıl Çalışır?
+            </h2>
+            <p className="text-brand-fume text-center mb-12">3 adımda spor hayatını aktifleştir.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              {STEPS.map(({ step, title, desc }) => (
+                <div key={step} className="text-center">
+                  <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span className="font-heading font-extrabold text-primary-700 text-xl">{step}</span>
+                  </div>
+                  <h3 className="font-heading font-bold text-black mb-2">{title}</h3>
+                  <p className="text-sm text-brand-fume leading-relaxed">{desc}</p>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <div className="h-16 bg-secondary" />
-            <div className="p-2 bg-white text-xs font-body">
-              <p className="font-semibold">Secondary</p>
-              <p className="text-brand-fume">#FF7E00</p>
+        </section>
+
+        {/* DEĞER ÖNERMESİ */}
+        <section className="py-16 px-4">
+          <div className="container-rny max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                { icon: '🗺️', title: 'Konum Bazlı Keşif', desc: 'Yakınındaki aktiviteleri harita üzerinde keşfet.' },
+                { icon: '🤝', title: 'Spor Arkadaşı Bul', desc: 'Aynı ilgi alanını paylaşan insanlarla buluş.' },
+                { icon: '📅', title: 'Kolay Planlama', desc: 'Aktivite oluştur, davet et, takvimini doldur.' },
+              ].map(({ icon, title, desc }) => (
+                <div key={title} className="card text-center hover:border-primary-300 transition-colors">
+                  <div className="text-4xl mb-3">{icon}</div>
+                  <h3 className="font-heading font-bold text-black mb-2">{title}</h3>
+                  <p className="text-sm text-brand-fume">{desc}</p>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <div className="h-16 bg-accent" />
-            <div className="p-2 bg-white text-xs font-body">
-              <p className="font-semibold">Accent</p>
-              <p className="text-brand-fume">#60E1EB</p>
-            </div>
+        </section>
+
+        {/* CTA */}
+        <section className="bg-gradient-to-r from-secondary to-[#e06500] py-16 px-4">
+          <div className="container-rny max-w-2xl mx-auto text-center">
+            <h2 className="font-heading text-3xl font-extrabold text-white mb-3">
+              Bugün Başla
+            </h2>
+            <p className="text-white/80 mb-8">
+              Ücretsiz hesap oluştur, ilk aktiviteni keşfet veya oluştur.
+            </p>
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center bg-white text-primary-700 font-heading font-bold text-lg px-8 py-3 rounded-xl hover:bg-gray-50 transition-colors no-underline"
+            >
+              Hemen Kaydol — Ücretsiz
+            </Link>
           </div>
-          <div className="rounded-lg overflow-hidden shadow-sm">
-            <div className="h-16 bg-brand-fume" />
-            <div className="p-2 bg-white text-xs font-body">
-              <p className="font-semibold">Füme</p>
-              <p className="text-brand-fume">#696969</p>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
-      {/* Buton Sistemi — Sprint 0 test */}
-      <section className="w-full max-w-2xl mb-10">
-        <h2 className="font-heading text-xl font-bold text-black mb-4">Buton Sistemi</h2>
-        <div className="flex flex-wrap gap-3">
-          <button className="btn-primary btn-md">Primary</button>
-          <button className="btn-secondary btn-md">Secondary</button>
-          <button className="btn-accent btn-md">Accent</button>
-          <button className="btn-outline btn-md">Outline</button>
-          <button className="btn-ghost btn-md">Ghost</button>
-          <button className="btn-primary btn-md" disabled>Disabled</button>
-        </div>
-      </section>
-
-      {/* Tipografi — Sprint 0 test */}
-      <section className="w-full max-w-2xl mb-10">
-        <h2 className="font-heading text-xl font-bold text-black mb-4">Tipografi</h2>
-        <div className="space-y-2 font-body">
-          <p className="font-heading text-3xl font-extrabold text-primary-700">H1 — Montserrat 800</p>
-          <p className="font-heading text-2xl font-bold text-primary-700">H2 — Montserrat 700</p>
-          <p className="font-heading text-xl font-semibold text-primary-700">H3 — Montserrat 600</p>
-          <p className="text-base text-brand-fume">Body — Nunito Sans 400 — #696969</p>
-          <p className="text-sm text-brand-intLink">Internal link — #2DB8C0</p>
-          <p className="text-sm text-brand-extLink">External link — #808080</p>
-        </div>
-      </section>
-
-      {/* Badge Sistemi */}
-      <section className="w-full max-w-2xl">
-        <h2 className="font-heading text-xl font-bold text-black mb-4">Badge Sistemi</h2>
-        <div className="flex flex-wrap gap-2">
-          <span className="badge-primary">Primary</span>
-          <span className="badge-success">Başarılı</span>
-          <span className="badge-warning">Uyarı</span>
-          <span className="badge-error">Hata</span>
-          <span className="badge-pending">Beklemede</span>
-        </div>
-      </section>
-
-      <footer className="mt-16 text-center text-sm text-brand-fume font-body">
-        Sprint 0 — Design System Test ✅ — Dorlion Ltd.
-      </footer>
-    </main>
+      <PublicFooter />
+    </div>
   );
 }
