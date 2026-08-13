@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { apiPath } from '@/lib/apiPath';
 
 type AdminUser = {
   uid: string; email: string; displayName: string; photoURL: string | null;
@@ -49,7 +50,7 @@ export default function UsersPage() {
 
   const reload = () => {
     setLoading(true);
-    fetch('/api/users').then((r) => r.json()).then(setUsers).finally(() => setLoading(false));
+    fetch(apiPath('/api/users')).then((r) => r.json()).then(setUsers).finally(() => setLoading(false));
   };
 
   useEffect(() => { reload(); }, []);
@@ -67,28 +68,28 @@ export default function UsersPage() {
     }
     setWorking(uid);
     if (action === 'delete') {
-      await fetch(`/api/users/${uid}`, { method: 'DELETE' });
+      await fetch(apiPath(`/api/users/${uid}`), { method: 'DELETE' });
       setUsers((prev) => prev.filter((u) => u.uid !== uid));
     } else if (action === 'reset-password') {
-      const res  = await fetch(`/api/users/${uid}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action }) });
+      const res  = await fetch(apiPath(`/api/users/${uid}`), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action }) });
       const data = await res.json();
       if (data.link) setResetLink(data.link);
     } else {
-      await fetch(`/api/users/${uid}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action }) });
+      await fetch(apiPath(`/api/users/${uid}`), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action }) });
       setUsers((prev) => prev.map((u) => u.uid === uid ? { ...u, disabled: action === 'ban' } : u));
     }
     setWorking(null);
   };
 
   const handlePlanChange = async (uid: string, plan: string) => {
-    await fetch(`/api/users/${uid}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update-plan', plan }) });
+    await fetch(apiPath(`/api/users/${uid}`), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'update-plan', plan }) });
     setUsers((prev) => prev.map((u) => u.uid === uid ? { ...u, plan, planStartDate: new Date().toISOString() } : u));
   };
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
     setAddLoading(true); setAddError('');
-    const res  = await fetch('/api/users', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newUser) });
+    const res  = await fetch(apiPath('/api/users'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newUser) });
     const data = await res.json();
     if (!res.ok) { setAddError(data.error); setAddLoading(false); return; }
     setShowAdd(false);
@@ -107,7 +108,7 @@ export default function UsersPage() {
       const [email, displayName, password, city] = line.split(',').map((s) => s.trim().replace(/^"|"$/g, ''));
       return { email, displayName, password, city };
     }).filter((r) => r.email);
-    const res  = await fetch('/api/users/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ rows }) });
+    const res  = await fetch(apiPath('/api/users/import'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ rows }) });
     const data = await res.json();
     setImportMsg(`✓ ${data.success} kullanıcı eklendi${data.failed > 0 ? `, ${data.failed} hatalı` : ''}.`);
     reload();

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { apiPath } from '@/lib/apiPath';
 
 type Format = 'openai-images' | 'stability-v2' | 'replicate' | 'fal';
 type Capability = 'image-generation' | 'text-generation';
@@ -91,14 +92,14 @@ export default function AIProvidersPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch('/api/ai-providers');
+    const res = await fetch(apiPath('/api/ai-providers'));
     setProviders(await res.json());
     setLoading(false);
   }, []);
 
   useEffect(() => {
     load();
-    fetch('/api/ai-config')
+    fetch(apiPath('/api/ai-config'))
       .then((r) => r.json())
       .then((data) => {
         setPromptTemplate(data.promptTemplate ?? DEFAULT_PROMPT);
@@ -108,7 +109,7 @@ export default function AIProvidersPage() {
 
   const savePrompt = async () => {
     setPromptSaving(true);
-    await fetch('/api/ai-config', {
+    await fetch(apiPath('/api/ai-config'), {
       method:  'PUT',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ promptTemplate }),
@@ -158,13 +159,13 @@ export default function AIProvidersPage() {
     setSaving(true);
     try {
       if (modal === 'add') {
-        await fetch('/api/ai-providers', {
+        await fetch(apiPath('/api/ai-providers'), {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(form),
         });
       } else if (editTarget) {
-        await fetch(`/api/ai-providers/${editTarget.id}`, {
+        await fetch(apiPath(`/api/ai-providers/${editTarget.id}`), {
           method:  'PUT',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify(form),
@@ -180,13 +181,13 @@ export default function AIProvidersPage() {
   async function handleDelete(id: string) {
     if (!confirm('Bu provider silinsin mi?')) return;
     setDeleting(id);
-    await fetch(`/api/ai-providers/${id}`, { method: 'DELETE' });
+    await fetch(apiPath(`/api/ai-providers/${id}`), { method: 'DELETE' });
     setDeleting(null);
     await load();
   }
 
   async function toggleActive(p: Provider) {
-    await fetch(`/api/ai-providers/${p.id}`, {
+    await fetch(apiPath(`/api/ai-providers/${p.id}`), {
       method:  'PUT',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ active: !p.active }),

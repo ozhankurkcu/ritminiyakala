@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { apiPath } from '@/lib/apiPath';
 
 // ── AI ikon üretim mini bileşeni ─────────────────────────────────────────────
 
@@ -33,7 +34,7 @@ function AIGenerateSection({
   useEffect(() => {
     if (!open) return;
     if (providers.length === 0) {
-      fetch('/api/ai-providers')
+      fetch(apiPath('/api/ai-providers'))
         .then((r) => r.json())
         .then((list: AIProvider[]) => {
           const img = list.filter((p) => p.active && p.capabilities.includes('image-generation'));
@@ -42,7 +43,7 @@ function AIGenerateSection({
         });
     }
     if (systemIcons.length === 0) {
-      fetch('/api/activity-types')
+      fetch(apiPath('/api/activity-types'))
         .then((r) => r.json())
         .then((list: SystemIconRef[]) => setSystemIcons(list));
     }
@@ -55,7 +56,7 @@ function AIGenerateSection({
     setError('');
     setPreview(null);
     try {
-      const res = await fetch('/api/activity-types/generate-icon', {
+      const res = await fetch(apiPath('/api/activity-types/generate-icon'), {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
@@ -93,7 +94,7 @@ function AIGenerateSection({
           {providers.length === 0 ? (
             <p className="text-yellow-500/80 text-xs">
               Henüz aktif resim üretimi provider tanımlı değil.{' '}
-              <a href="/ai-providers" target="_blank" className="underline text-violet-400">AI Entegrasyonları</a>{' '}
+              <a href={apiPath('/ai-providers')} target="_blank" className="underline text-violet-400">AI Entegrasyonları</a>{' '}
               sayfasından ekleyin.
             </p>
           ) : (
@@ -298,7 +299,7 @@ export default function ActivityTypesPage() {
   const propFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch('/api/activity-types')
+    fetch(apiPath('/api/activity-types'))
       .then((r) => r.json())
       .then(setSystemTypes)
       .finally(() => setSystemLoading(false));
@@ -307,7 +308,7 @@ export default function ActivityTypesPage() {
   useEffect(() => {
     if (tab !== 'proposals' || proposals.length > 0) return;
     setProposalLoading(true);
-    fetch('/api/custom-types')
+    fetch(apiPath('/api/custom-types'))
       .then((r) => r.json())
       .then(setProposals)
       .finally(() => setProposalLoading(false));
@@ -349,12 +350,12 @@ export default function ActivityTypesPage() {
         const fd = new FormData();
         fd.append('slug', editTarget.slug);
         fd.append('icon', iconFile);
-        await fetch('/api/activity-types/icon', { method: 'POST', body: fd });
+        await fetch(apiPath('/api/activity-types/icon'), { method: 'POST', body: fd });
       }
 
       // 2. Metadata güncelle — AI ile üretilen ikon URL'si de dahil
       const cleanIconUrl = iconPreview ? iconPreview.split('?')[0] : null;
-      await fetch('/api/activity-types', {
+      await fetch(apiPath('/api/activity-types'), {
         method:  'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
@@ -394,7 +395,7 @@ export default function ActivityTypesPage() {
   const handleDelete = async () => {
     if (!editTarget) return;
     if (!confirm(`"${editLabel}" aktivite türünü silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`)) return;
-    await fetch('/api/activity-types', {
+    await fetch(apiPath('/api/activity-types'), {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ field: 'delete', slug: editTarget.slug }),
@@ -421,7 +422,7 @@ export default function ActivityTypesPage() {
       .sort((a, b) => a.order - b.order);
     setSystemTypes(updated);
 
-    await fetch('/api/activity-types', {
+    await fetch(apiPath('/api/activity-types'), {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ field: 'order', value: newOrder }),
@@ -431,17 +432,19 @@ export default function ActivityTypesPage() {
   // ── Kullanıcı önerileri ───────────────────────────────────────────────────
 
   const patchProposal = (id: string, body: Record<string, unknown>) =>
-    fetch(`/api/custom-types/${id}`, {
+    fetch(apiPath(`/api/custom-types/${id}`), {
       method:  'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(body),
     });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleApprove = async (item: CustomTypeEntry) => {
     await patchProposal(item.id, { action: 'approve', customTypeName: item.customTypeName });
     setProposals((prev) => prev.map((i) => i.id === item.id ? { ...i, customTypeStatus: 'approved' } : i));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleReject = async (id: string) => {
     if (!confirm('Bu öneriyi reddetmek istediğinize emin misiniz?')) return;
     await patchProposal(id, { action: 'reject' });
@@ -490,7 +493,7 @@ export default function ActivityTypesPage() {
         const fd = new FormData();
         fd.append('id', propEditTarget.id);
         fd.append('icon', propIconFile);
-        const res = await fetch('/api/custom-types/icon', { method: 'POST', body: fd });
+        const res = await fetch(apiPath('/api/custom-types/icon'), { method: 'POST', body: fd });
         const data = await res.json() as { iconUrl?: string };
         uploadedIconUrl = data.iconUrl;
       }

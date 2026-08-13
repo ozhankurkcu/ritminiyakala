@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
-import { FieldValue } from 'firebase-admin/firestore';
 
 export type AIProviderFormat = 'openai-images' | 'stability-v2' | 'replicate' | 'fal';
 export type AICapability = 'image-generation' | 'text-generation';

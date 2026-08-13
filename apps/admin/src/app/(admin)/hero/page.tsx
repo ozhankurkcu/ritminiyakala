@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { apiPath } from '@/lib/apiPath';
 
 type Slide = {
   id: string;
@@ -41,7 +42,7 @@ export default function HeroAdminPage() {
   const [isNew, setIsNew] = useState(false);
 
   useEffect(() => {
-    fetch('/api/hero').then((r) => r.json()).then(setConfig);
+    fetch(apiPath('/api/hero')).then((r) => r.json()).then(setConfig);
   }, []);
 
   const set = <K extends keyof HeroConfig>(key: K, val: HeroConfig[K]) =>
@@ -50,7 +51,7 @@ export default function HeroAdminPage() {
   const save = async () => {
     if (!config) return;
     setSaving(true);
-    await fetch('/api/hero', {
+    await fetch(apiPath('/api/hero'), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(config),

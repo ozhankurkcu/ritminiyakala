@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { apiPath } from '@/lib/apiPath';
 
 const DEFAULT_PROMPT = `A minimalist flat-style icon representing {subject}.
 Clean vector look, bold simple shapes, vibrant single background color that fits the Ritminiyakala brand palette (deep purple #631C99 or energetic orange #E07000).
@@ -15,7 +16,7 @@ export default function AISettingsPage() {
   const [saved,    setSaved]    = useState(false);
 
   useEffect(() => {
-    fetch('/api/ai-config')
+    fetch(apiPath('/api/ai-config'))
       .then((r) => r.json())
       .then((data) => {
         setPromptTemplate(data.promptTemplate ?? DEFAULT_PROMPT);
@@ -25,7 +26,7 @@ export default function AISettingsPage() {
 
   const handleSave = async () => {
     setSaving(true);
-    await fetch('/api/ai-config', {
+    await fetch(apiPath('/api/ai-config'), {
       method:  'PUT',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ promptTemplate }),

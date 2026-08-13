@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { apiPath } from '@/lib/apiPath';
 
 type Slide = {
   id: string;
@@ -57,7 +58,7 @@ export function HeroSlider() {
   const [fading,  setFading]  = useState(false);
 
   useEffect(() => {
-    fetch('/api/hero').then((r) => r.json()).then((data: HeroConfig) => {
+    fetch(apiPath('/api/hero')).then((r) => r.json()).then((data: HeroConfig) => {
       setConfig(data);
       setCurrent(0);
     }).catch(() => {});

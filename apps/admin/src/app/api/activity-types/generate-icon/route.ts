@@ -50,7 +50,7 @@ async function callOpenAIEdits(p: ProviderDoc, prompt: string, refBuffer: Buffer
   form.append('prompt', prompt);
   form.append('n',      '1');
   form.append('size',   p.params?.size || '1024x1024');
-  form.append('image',  new Blob([refBuffer], { type: 'image/png' }), 'reference.png');
+  form.append('image',  new Blob([Uint8Array.from(refBuffer)], { type: 'image/png' }), 'reference.png');
 
   const res = await fetch(url, {
     method:  'POST',

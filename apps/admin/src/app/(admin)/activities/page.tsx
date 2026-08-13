@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useState, useEffect } from 'react';
+import { apiPath } from '@/lib/apiPath';
 
 type AdminActivity = {
   id: string; title: string; activityType: string; organizerName: string;
@@ -27,7 +28,7 @@ export default function ActivitiesPage() {
   const [filter,     setFilter]     = useState('all');
 
   useEffect(() => {
-    fetch('/api/activities').then((r) => r.json()).then(setActivities).finally(() => setLoading(false));
+    fetch(apiPath('/api/activities')).then((r) => r.json()).then(setActivities).finally(() => setLoading(false));
   }, []);
 
   const filtered = activities.filter((a) => {
@@ -40,13 +41,13 @@ export default function ActivitiesPage() {
 
   const handleCancel = async (id: string) => {
     if (!confirm('Bu aktiviteyi iptal etmek istediğinize emin misiniz?')) return;
-    await fetch(`/api/activities/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'cancel' }) });
+    await fetch(apiPath(`/api/activities/${id}`), { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'cancel' }) });
     setActivities((prev) => prev.map((a) => a.id === id ? { ...a, status: 'cancelled' } : a));
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Bu aktiviteyi kalıcı olarak silmek istediğinize emin misiniz?')) return;
-    await fetch(`/api/activities/${id}`, { method: 'DELETE' });
+    await fetch(apiPath(`/api/activities/${id}`), { method: 'DELETE' });
     setActivities((prev) => prev.filter((a) => a.id !== id));
   };
 

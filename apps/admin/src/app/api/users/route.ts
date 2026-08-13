@@ -27,7 +27,7 @@ export async function GET() {
       joinedCount[uid] = (joinedCount[uid] ?? 0) + 1;
     });
 
-    const allUids = new Set([...authMap.keys(), ...fsMap.keys()]);
+    const allUids = new Set(Array.from(authMap.keys()).concat(Array.from(fsMap.keys())));
 
     const users = Array.from(allUids).map((uid) => {
       const auth    = authMap.get(uid);
