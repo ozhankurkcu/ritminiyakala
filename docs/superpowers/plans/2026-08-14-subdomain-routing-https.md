@@ -253,6 +253,30 @@ Names/Forward Hostname/Forward Port, **Block Common Exploits** on → SSL tab: s
 router's ~13-18 char hostname limit discovered in Task 4 — the Forward Hostname column still uses
 the real, unabbreviated container names.)
 
+**Discovered during execution (two gaps, both fixed):**
+1. NPM's Add Proxy Host form defaults the backend "Scheme" to whatever was last used, which came
+   out as `https` for all 6 — but every backend container serves plain HTTP on port 3000. This
+   caused `SSL_do_handshake() failed ... wrong version number` and 502s on every host. Fixed by
+   setting `forward_scheme = 'http'` in the `proxy_host` DB rows (ids 13-18) and the matching
+   `set $forward_scheme http;` line in each `/data/nginx/proxy_host/{id}.conf`, then
+   `nginx -s reload`. When redoing this via the NPM UI, explicitly set the Scheme dropdown to
+   **http** for every one of these 6 hosts.
+2. The old path-based setup had NPM-level Basic Auth on `/ritminiyakala-admin/` (on top of the
+   app's own login) via `/data/access/ritminiyakala-admin.htpasswd`. The plan's proxy-host table
+   above didn't carry that requirement over to the new `ritim-admin.coffeenok.com` host, so the
+   admin panel was reachable with only its app-level login until this was caught by Task 9-style
+   verification (expected 401, got 307) run early. Fixed by adding to
+   `/data/nginx/proxy_host/14.conf`'s `location /` block:
+   ```
+   auth_basic "Restricted";
+   auth_basic_user_file /data/access/ritminiyakala-admin.htpasswd;
+   ```
+   then `nginx -s reload`. **If Task 5 is ever redone from scratch** (e.g. a fresh NPM install),
+   add these two lines to `ritim-admin.coffeenok.com`'s proxy host — NPM's UI doesn't have a
+   direct Basic Auth field on a plain Proxy Host, so this still requires the same direct conf edit
+   (or an NPM Access List, which is a UI-native alternative not used here for consistency with the
+   htpasswd file already in place).
+
 - [ ] **Step 3: Verify all 7 rows exist and are enabled**
 
 ```bash
