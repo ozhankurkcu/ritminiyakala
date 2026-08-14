@@ -178,11 +178,20 @@ Connect C1AA), not by the agent.
   `ritminiyakala.coffeenok.com`, `ritminiyakala-admin.coffeenok.com`,
   `codbizme.coffeenok.com`, `onlineopportunities.coffeenok.com`, `arqhy.coffeenok.com`.
 
+  **Discovered during execution:** the router (Etisalat eLife Connect C1AA) silently rejects
+  hostname labels of 19+ characters (confirmed: `ritminiyakala-admin` and `onlineopportunities`,
+  both 19 chars, failed to resolve even though the router UI accepted them; everything ≤13 chars
+  worked). Shortened to `ritim-admin.coffeenok.com` and `onlineopp.coffeenok.com` — both 11 and 9
+  chars respectively, confirmed resolving. **Every later step in this plan that mentions
+  `ritminiyakala-admin.coffeenok.com` or `onlineopportunities.coffeenok.com` as a domain name uses
+  these shortened forms instead** — the container names themselves (`ritminiyakala-admin`,
+  `onlineopportunities`) are unchanged.
+
 - [ ] **Step 3 (agent): Verify resolution from the server**, once the user confirms they've saved
   the changes:
 
 ```bash
-for h in ritminiyakala ritminiyakala-admin codbizme onlineopportunities arqhy auxenme cloud media projects katip; do
+for h in ritminiyakala ritim-admin codbizme onlineopp arqhy auxenme cloud media projects katip; do
   echo -n "$h.coffeenok.com -> "; getent hosts "$h.coffeenok.com" | awk '{print $1}'
 done
 for h in mission portainer cockpit home; do
@@ -234,11 +243,15 @@ Names/Forward Hostname/Forward Port, **Block Common Exploits** on → SSL tab: s
 | Domain Names | Forward Hostname / IP | Forward Port |
 |---|---|---|
 | ritminiyakala.coffeenok.com | ritminiyakala | 3000 |
-| ritminiyakala-admin.coffeenok.com | ritminiyakala-admin | 3000 |
+| ritim-admin.coffeenok.com | ritminiyakala-admin | 3000 |
 | codbizme.coffeenok.com | codbizme | 3000 |
-| onlineopportunities.coffeenok.com | onlineopportunities | 3000 |
+| onlineopp.coffeenok.com | onlineopportunities | 3000 |
 | arqhy.coffeenok.com | arqhy | 3000 |
 | auxenme.coffeenok.com | auxenme | 3000 |
+
+(Domain names `ritim-admin` / `onlineopp` are shortened from the container names due to the
+router's ~13-18 char hostname limit discovered in Task 4 — the Forward Hostname column still uses
+the real, unabbreviated container names.)
 
 - [ ] **Step 3: Verify all 7 rows exist and are enabled**
 
@@ -247,22 +260,22 @@ docker exec npm python3 -c "
 import sqlite3
 db = sqlite3.connect('/data/database.sqlite')
 cur = db.cursor()
-cur.execute(\"SELECT domain_names, forward_host, forward_port, certificate_id, ssl_forced, enabled FROM proxy_host WHERE domain_names LIKE '%ritminiyakala%' OR domain_names LIKE '%codbizme%' OR domain_names LIKE '%onlineopportunities%' OR domain_names LIKE '%arqhy%' OR domain_names LIKE '%auxenme%'\")
+cur.execute(\"SELECT domain_names, forward_host, forward_port, certificate_id, ssl_forced, enabled FROM proxy_host WHERE domain_names LIKE '%ritminiyakala%' OR domain_names LIKE '%codbizme%' OR domain_names LIKE '%onlineopp%' OR domain_names LIKE '%arqhy%' OR domain_names LIKE '%auxenme%' OR domain_names LIKE '%ritim-admin%'\")
 for row in cur.fetchall(): print(row)
 "
 ```
 
-Expected: 6 rows (ritminiyakala, ritminiyakala-admin, codbizme, onlineopportunities, arqhy,
+Expected: 6 rows (ritminiyakala, ritim-admin, codbizme, onlineopp, arqhy,
 auxenme), each with a non-zero `certificate_id`, `ssl_forced=1`, `enabled=1`.
 
 - [ ] **Step 4: Smoke-test HTTPS from the server**
 
 ```bash
-for h in ritminiyakala codbizme onlineopportunities arqhy auxenme; do
+for h in ritminiyakala codbizme onlineopp arqhy auxenme; do
   echo -n "$h.coffeenok.com -> "
   curl -s -o /dev/null -w "HTTP %{http_code}\n" -k "https://$h.coffeenok.com/"
 done
-curl -s -o /dev/null -w "ritminiyakala-admin (Basic Auth expected) -> HTTP %{http_code}\n" -k "https://ritminiyakala-admin.coffeenok.com/"
+curl -s -o /dev/null -w "ritim-admin (Basic Auth expected) -> HTTP %{http_code}\n" -k "https://ritim-admin.coffeenok.com/"
 ```
 
 Expected: `200` for the 5 plain projects (or a Next.js redirect code if the app itself redirects,
@@ -326,7 +339,7 @@ cd /opt/stacks/ritminiyakala-admin && docker compose up -d --force-recreate
 ```bash
 curl -s -o /dev/null -w "web root -> HTTP %{http_code}\n" -k "https://ritminiyakala.coffeenok.com/"
 curl -s -k "https://ritminiyakala.coffeenok.com/" | grep -o '_next/static[^"]*' | head -3
-curl -s -o /dev/null -w "admin login -> HTTP %{http_code}\n" -k -u "ritminiyakala-admin:gqEgKy2aBegEH6J6zvrY" "https://ritminiyakala-admin.coffeenok.com/login"
+curl -s -o /dev/null -w "admin login -> HTTP %{http_code}\n" -k -u "ritminiyakala-admin:gqEgKy2aBegEH6J6zvrY" "https://ritim-admin.coffeenok.com/login"
 ```
 
 Expected: `200` for both; the `_next/static` asset paths do **not** start with
@@ -361,7 +374,7 @@ Edit `/opt/stacks/project-portal/config/projects.json` so each `url` becomes the
 "url": "https://ritminiyakala.coffeenok.com"
 ```
 ```json
-"url": "https://onlineopportunities.coffeenok.com"
+"url": "https://onlineopp.coffeenok.com"
 ```
 ```json
 "url": "https://codbizme.coffeenok.com"
@@ -458,8 +471,8 @@ with `NEXT_PUBLIC_BASE_PATH` unset (empty prefix).
 - [ ] **Step 3: ritminiyakala-admin Basic Auth + app login still both work**
 
 ```bash
-curl -s -o /dev/null -w "no auth -> HTTP %{http_code}\n" -k "https://ritminiyakala-admin.coffeenok.com/"
-curl -s -o /dev/null -w "basic auth -> HTTP %{http_code}\n" -k -u "ritminiyakala-admin:gqEgKy2aBegEH6J6zvrY" "https://ritminiyakala-admin.coffeenok.com/login"
+curl -s -o /dev/null -w "no auth -> HTTP %{http_code}\n" -k "https://ritim-admin.coffeenok.com/"
+curl -s -o /dev/null -w "basic auth -> HTTP %{http_code}\n" -k -u "ritminiyakala-admin:gqEgKy2aBegEH6J6zvrY" "https://ritim-admin.coffeenok.com/login"
 ```
 
 Expected: `401` then `200`.
