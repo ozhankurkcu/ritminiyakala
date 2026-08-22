@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "935970750997",
+    "project_id": "ritminiyakala-dev",
+    "storage_bucket": "ritminiyakala-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935970750997:android:41af6d615318e8a9ce041c",
+        "android_client_info": {
+          "package_name": "com.ritminiyakala.mobile.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrrTv0IHINkOHxt0-k6xGT7KLvPA8-UjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
