@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "674730118777",
+    "project_id": "ritminiyakala-staging",
+    "storage_bucket": "ritminiyakala-staging.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674730118777:android:97eb2de31de1234b634ea8",
+        "android_client_info": {
+          "package_name": "com.ritminiyakala.mobile.staging"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFuTgIwEfOyu-dgDbxKM4g4REQcCpvSpY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

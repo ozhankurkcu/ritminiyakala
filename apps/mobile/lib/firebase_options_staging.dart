@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options_dev.dart';
+/// import 'firebase_options_staging.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -26,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,18 +53,10 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBrrTv0IHINkOHxt0-k6xGT7KLvPA8-UjQ',
-    appId: '1:935970750997:android:41af6d615318e8a9ce041c',
-    messagingSenderId: '935970750997',
-    projectId: 'ritminiyakala-dev',
-    storageBucket: 'ritminiyakala-dev.firebasestorage.app',
-  );
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAaJukIZeVhiJaOX2ohlyjpLMyQii512AY',
-    appId: '1:935970750997:ios:91029e9c49c2ae2cce041c',
-    messagingSenderId: '935970750997',
-    projectId: 'ritminiyakala-dev',
-    storageBucket: 'ritminiyakala-dev.firebasestorage.app',
-    iosBundleId: 'com.ritminiyakala.mobile.dev',
+    apiKey: 'AIzaSyDFuTgIwEfOyu-dgDbxKM4g4REQcCpvSpY',
+    appId: '1:674730118777:android:97eb2de31de1234b634ea8',
+    messagingSenderId: '674730118777',
+    projectId: 'ritminiyakala-staging',
+    storageBucket: 'ritminiyakala-staging.firebasestorage.app',
   );
 }
