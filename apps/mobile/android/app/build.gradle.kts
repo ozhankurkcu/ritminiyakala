@@ -32,6 +32,27 @@ android {
         versionName = flutter.versionName
     }
 
+    // dev/staging/prod ortamları için ayrı applicationId + uygulama adı + Firebase projesi.
+    // google-services.json her flavor için android/app/src/<flavor>/ altına konur.
+    flavorDimensions += "env"
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            applicationId = "com.ritminiyakala.mobile.dev"
+            resValue("string", "app_name", "Ritmi Dev")
+        }
+        create("staging") {
+            dimension = "env"
+            applicationId = "com.ritminiyakala.mobile.staging"
+            resValue("string", "app_name", "Ritmi Staging")
+        }
+        create("prod") {
+            dimension = "env"
+            applicationId = "com.ritminiyakala.mobile"
+            resValue("string", "app_name", "ritminiyakala")
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
